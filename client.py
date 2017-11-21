@@ -2,8 +2,8 @@
 
 import socket
 
-client_socket = socket.socket()
-client_socket.connect(('localhost', 34344))
+Сlient_Socket = socket.socket()
+Сlient_Socket.connect(('localhost', 34344))
 print(("\n\n"
        "<1> - Добавить новую книгу\n"
        "<2> - Удалить книгу\n"
@@ -49,7 +49,7 @@ try:
             print(data.decode('utf-8'))
 
         if number == 5:
-            data = client_socket.recv(4096)
+            data = client_socket.recv(8192)
             print(data.decode('utf-8'))
 
         if number == 6:

@@ -44,20 +44,18 @@ def connecting(client):
         print("Server to stop...")
 
 
-def stop_server():
+def stop_server(server_socket):
     Stop = int(input("Для отсановки серверы нажмите '1':\n"))
     if Stop == 1:
         client.close()
-
-    else:
-        stop_server()
+        server_socket.close()
 
 
 while True:
     client, address = server_socket.accept()
 
     main = threading.Thread(target=connecting, args=[client])
-    stop = threading.Thread(target=stop_server)
+    stop = threading.Thread(target=stop_server, args=[server_socket])
     stop.start()
     main.start()
 

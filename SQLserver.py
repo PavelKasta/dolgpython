@@ -1,47 +1,51 @@
 import pypyodbc
 
+BUFFSIZE = 1024
+
+
+def send_message(message, client):
+    client.send(message.encode('utf8'))
+
+
+def message(client):
+    data = client.recv(BUFFSIZE)
+    return data.decode('utf8')
+
 
 def add_book(client):
-
     client.send("Добавте поля для новой книги через Enter:\n Уникильный номер:".encode('utf8'))
+    num = message(client)
 
-    data = client.recv(1024)  # получаем данные в байтах
-    num = data.decode('utf8')  # декодировали в строку данные
+    send_message("Автор", client)
+    aut = message(client)
 
-    client.send("Автор:".encode('utf8'))
-    data = client.recv(1024)  # получаем данные в байтах
-    aut = data.decode('utf8')  # декодировали в строку данные
+    send_message("Название", client)
+    nam = message(client)
 
-    client.send("Название:".encode('utf8'))
-    data = client.recv(1024)  # получаем данные в байтах
-    nam = data.decode('utf8')  # декодировали в строку данные
+    send_message("Год выпуска", client)
+    yea = message(client)
 
-    client.send("Год выпуска:".encode('utf8'))
-    data = client.recv(1024)  # получаем данные в байтах
-    yea = data.decode('utf8')  # декодировали в строку данные
+    send_message("Колличество экземпляров", client)
+    amo = message(client)
 
-    client.send("Колличество экземпляров:".encode('utf8'))
-    data = client.recv(1024)  # получаем данные в байтах
-    amo = data.decode('utf8')  # декодировали в строку данные
-
-    connection = pypyodbc.connect('DRIVER={SQL Server};SERVER=LAPTOP-MIC3C7G7\PASHASERVER;DATABASE=PashaSQL;')
+    connection = pypyodbc.connect('DRIVER={SQL Server};\
+    SERVER=LAPTOP-MIC3C7G7\PASHASERVER;DATABASE=PashaSQL;')
     cursor = connection.cursor()
 
     cursor.execute("INSERT INTO Books\n"
                    "VALUES('" + num + "', '" + aut + "', '" + nam + "','" + yea + "','" + amo + "')")
 
-    client.send("Книга успешно добавлена!".encode('utf8'))
+    send_message("Книга успешно добавлена", client)
     connection.commit()
     connection.close()
 
 
 def find_book(client):
-    client.send("Введите название книги которую вы ищите:".encode('utf8'))
+    send_message("Введите название книги которую вы ищите:", client)
+    Name_Book = message(client)
 
-    data = client.recv(1024)  # получаем данные в байтах
-    Name_Book = data.decode('utf8')  # декодировали в строку данные
-
-    connection = pypyodbc.connect('DRIVER={SQL Server};SERVER=LAPTOP-MIC3C7G7\PASHASERVER;DATABASE=PashaSQL;')
+    connection = pypyodbc.connect('DRIVER={SQL Server};\
+        SERVER=LAPTOP-MIC3C7G7\PASHASERVER;DATABASE=PashaSQL;')
     cursor = connection.cursor()
 
     find = ("SELECT Название\n"
@@ -54,20 +58,20 @@ def find_book(client):
         b_name = row[0]
 
     try:
-        client.send(("Книга '" + str(b_name) + "' присутствует в базе!").encode('utf8'))
+        send_message("Книга '" + str(b_name) + "' присутствует в базе!", client)
     except NameError:
-        client.send(("Книга '" + str(Name_Book) + "' отсутствует в базе!").encode('utf8'))
+        send_message("Книга '" + str(Name_Book) + "' отсутствует в базе!", client)
 
     connection.close()
 
 
 def delete_book(client):
-    client.send("Введите название книги которую хотите удалить:".encode('utf8'))
+    send_message("Введите название книги которую хотите удалить:", client)
 
-    data = client.recv(1024)  # получаем данные в байтах
-    Name_Book = data.decode('utf8')  # декодировали в строку данные
+    Name_Book = message(client)
 
-    connection = pypyodbc.connect('DRIVER={SQL Server};SERVER=LAPTOP-MIC3C7G7\PASHASERVER;DATABASE=PashaSQL;')
+    connection = pypyodbc.connect('DRIVER={SQL Server};\
+        SERVER=LAPTOP-MIC3C7G7\PASHASERVER;DATABASE=PashaSQL;')
     cursor = connection.cursor()
 
     find = ("SELECT Название\n"
@@ -81,7 +85,8 @@ def delete_book(client):
 
     try:
         str(b_name)
-        connection = pypyodbc.connect('DRIVER={SQL Server};SERVER=LAPTOP-MIC3C7G7\PASHASERVER;DATABASE=PashaSQL;')
+        connection = pypyodbc.connect('DRIVER={SQL Server};\
+            SERVER=LAPTOP-MIC3C7G7\PASHASERVER;DATABASE=PashaSQL;')
         cursor = connection.cursor()
 
         dell = ("DELETE FROM Books WHERE Название = '" + Name_Book + "'")
@@ -89,19 +94,19 @@ def delete_book(client):
         cursor.execute(dell)
         connection.commit()
 
-        client.send("Книга успешно удалена из базы".encode('utf8'))
+        send_message("Книга успешно удалена из базы", client)
         connection.close()
     except NameError:
-        client.send("Такой книги нет в базе".encode('utf8'))
+        send_message("Такой книги нет в базе", client)
 
 
 def edit_book(client):
-    client.send("Введите название книги которую хотите изменить:".encode('utf8'))
+    send_message("Введите название книги которую хотите изменить:", client)
 
-    data = client.recv(1024)
-    name = data.decode('utf8')
+    name = message(client)
 
-    connection = pypyodbc.connect('DRIVER={SQL Server};SERVER=LAPTOP-MIC3C7G7\PASHASERVER;DATABASE=PashaSQL;')
+    connection = pypyodbc.connect('DRIVER={SQL Server};\
+        SERVER=LAPTOP-MIC3C7G7\PASHASERVER;DATABASE=PashaSQL;')
     cursor = connection.cursor()
 
     find = ("SELECT Название\n"
@@ -115,28 +120,23 @@ def edit_book(client):
 
     try:
         str(b_name)
-        client.send("Новый уникильный номер:".encode('utf8'))
+        send_message("Новый уникильный номер:", client)
+        num = message(client)
 
-        data = client.recv(1024)  # получаем данные в байтах
-        num = data.decode('utf8')  # декодировали в строку данные
+        send_message("Автор:", client)
+        aut = message(client)
 
-        client.send("Автор:".encode('utf8'))
-        data = client.recv(1024)  # получаем данные в байтах
-        aut = data.decode('utf8')  # декодировали в строку данные
+        send_message("Год выпуска:", client)
+        yea = message(client)
 
-        client.send("Название:".encode('utf8'))
-        data = client.recv(1024)  # получаем данные в байтах
-        nam = data.decode('utf8')  # декодировали в строку данные
+        send_message("Колличество экземпляров:", client)
+        amo = message(client)
 
-        client.send("Год выпуска:".encode('utf8'))
-        data = client.recv(1024)  # получаем данные в байтах
-        yea = data.decode('utf8')  # декодировали в строку данные
+        send_message("Название книги:", client)
+        nam = message(client)
 
-        client.send("Колличество экземпляров:".encode('utf8'))
-        data = client.recv(1024)  # получаем данные в байтах
-        amo = data.decode('utf8')  # декодировали в строку данные
-
-        connection = pypyodbc.connect('DRIVER={SQL Server};SERVER=LAPTOP-MIC3C7G7\PASHASERVER;DATABASE=PashaSQL;')
+        connection = pypyodbc.connect('DRIVER={SQL Server};\
+            SERVER=LAPTOP-MIC3C7G7\PASHASERVER;DATABASE=PashaSQL;')
         cursor = connection.cursor()
 
         number = (
@@ -189,12 +189,12 @@ def edit_book(client):
 
 
 def info_one_book(client):
-    client.send('О какой книге вы хотетие получить информацию:'.encode('utf8'))
+    send_message('О какой книге вы хотетие получить информацию:', client)
 
-    data = client.recv(1024)  # получаем данные в байтах
-    Name_Book = data.decode('utf8')  # декодировали в строку данные
+    Name_Book = message(client)
 
-    connection = pypyodbc.connect('DRIVER={SQL Server};SERVER=LAPTOP-MIC3C7G7\PASHASERVER;DATABASE=PashaSQL;')
+    connection = pypyodbc.connect('DRIVER={SQL Server};\
+        SERVER=LAPTOP-MIC3C7G7\PASHASERVER;DATABASE=PashaSQL;')
     cursor = connection.cursor()
 
     find = ("SELECT Название\n"
@@ -209,10 +209,12 @@ def info_one_book(client):
     try:
         str(b_name)
 
-        connection = pypyodbc.connect('DRIVER={SQL Server};SERVER=LAPTOP-MIC3C7G7\PASHASERVER;DATABASE=PashaSQL;')
+        connection = pypyodbc.connect('DRIVER={SQL Server};\
+            SERVER=LAPTOP-MIC3C7G7\PASHASERVER;DATABASE=PashaSQL;')
         cursor = connection.cursor()
 
-        mySQLQuery = ("SELECT Уникальный_номер, Автор, Название, Год_выпуска, Колличество_экземпляров\n"
+        mySQLQuery = ("SELECT Уникальный_номер, Автор, Название, Год_выпуска,\
+         Колличество_экземпляров\n"
                       "FROM dbo.Books\n"
                       "WHERE Название ='" + Name_Book + "'")
 
@@ -230,15 +232,16 @@ def info_one_book(client):
                         "Колличество_экземпляров: "
                         "{4:7}\t\n".format(number, author, name, year, amount))
 
-            client.send(count.encode('utf8'))
+            send_message(count, client)
 
             connection.close()
     except NameError:
-        client.send("Такой книги нет в базе!".encode('utf8'))
+        send_message("Такой книги нет в базе!", client)
 
 
 def info_all_book(client):
-    connection = pypyodbc.connect('DRIVER={SQL Server};SERVER=LAPTOP-MIC3C7G7\PASHASERVER;DATABASE=PashaSQL;')
+    connection = pypyodbc.connect('DRIVER={SQL Server};\
+        SERVER=LAPTOP-MIC3C7G7\PASHASERVER;DATABASE=PashaSQL;')
     cursor = connection.cursor()
 
     mySQLQuery = ("SELECT Уникальный_номер, Автор, Название, Год_выпуска, Колличество_экземпляров\n"
@@ -261,4 +264,4 @@ def info_all_book(client):
                     "{4:7}\t\n".format(number, author, name, year, amount))
         table = table + count
 
-    client.send(table.encode("utf8"))
+    send_message(table, client)
