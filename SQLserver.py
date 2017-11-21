@@ -226,8 +226,11 @@ def info_one_book(client):
             year = row[3]
             amount = row[4]
 
-            client.send(("||Уникальный_номер:" + str(number) + "||Автор:" + str(author) + "||Название:" + str(name) +
-                         "||Год_выпуска:" + str(year) + "||Колличество_экземпляров:" + str(amount)).encode('utf8'))
+            count = str("Уникальный_номер: {0:7}\t Автор: {1:20}\t Название: {2:20}\t Год_выпуска: {3:7}\t "
+                        "Колличество_экземпляров: "
+                        "{4:7}\t\n".format(number, author, name, year, amount))
+
+            client.send(count.encode('utf8'))
 
             connection.close()
     except NameError:
