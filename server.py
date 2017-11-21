@@ -36,10 +36,20 @@ def connecting(client):
             SQLserver.edit_book(client)
 
 
+def stop_server():
+    Stop = int(input("Для отсановки серверы нажмите '1':"))
+    if Stop == 1:
+        client.close()
+    else:
+        stop_server()
+
+
 while True:
     client, address = server_socket.accept()
 
     main = threading.Thread(target=connecting, args=[client])
+    stop = threading.Thread(target=stop_server)
+    stop.start()
     main.start()
 
 server_socket.close()
