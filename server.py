@@ -1,7 +1,6 @@
 import socket
 import SQLserver
-#import pickle
-#import Test
+import threading
 
 server_socket = socket.socket()
 server_socket.bind(('', 34344))
@@ -11,9 +10,8 @@ print('Server to start...')
 
 clients = []
 
-while True:
-    client, address = server_socket.accept()
 
+def connecting(client):
     while True:
 
         data = client.recv(1024)  # получаем данные в байтах
@@ -36,5 +34,12 @@ while True:
 
         elif int(number) == 6:
             SQLserver.edit_book(client)
+
+
+while True:
+    client, address = server_socket.accept()
+
+    main = threading.Thread(target=connecting, args=client)
+    main.start()
 
 server_socket.close()

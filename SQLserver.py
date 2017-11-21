@@ -244,15 +244,17 @@ def info_all_book(client):
     results = cursor.fetchall()
     connection.close()
 
-    # print(results)
-    client.send(str(results).encode('utf8'))
+    table = str()
+    for row in results:
+        number = row[0]
+        author = row[1]
+        name = row[2]
+        year = row[3]
+        amount = row[4]
 
-    # for row in results:
-    #    number = row[0]
-    #    author = row[1]
-    #    name = row[2]
-    #    year = row[3]
-    #    amount = row[4]
+        count = str("Уникальный_номер: {0:7}\t Автор: {1:20}\t Название: {2:20}\t Год_выпуска: {3:7}\t "
+                    "Колличество_экземпляров: "
+                    "{4:7}\t\n".format(number, author, name, year, amount))
+        table = table + count
 
-    # client.send(("||Уникальный_номер:" + str(number) + "||Автор:" + str(author) + "||Название:" + str(name) +
-    #             "||Год_выпуска:" + str(year) + "||Колличество_экземпляров:" + str(amount)).encode('utf8'))
+    client.send(table.encode("utf8"))

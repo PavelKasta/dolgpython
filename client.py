@@ -1,20 +1,18 @@
 # -*-coding:UTF-8-*-
 
 import socket
-import pickle
 
 client_socket = socket.socket()
 client_socket.connect(('localhost', 34344))
-
+print(("\n\n"
+       "<1> - Добавить новую книгу\n"
+       "<2> - Удалить книгу\n"
+       "<3> - Найти книгу\n"
+       "<4> - Просмотреть информацию о книге\n"
+       "<5> - Просмотреть информацию о всех книгах\n"
+       "<6> - Модифицировать информацию о книгах\n"))
 while True:
-    print(("\n\nВыберете пункт меню:\n"
-           "<1> - Добавить новую книгу\n"
-           "<2> - Удалить книгу\n"
-           "<3> - Найти книгу\n"
-           "<4> - Просмотреть информацию о книге\n"
-           "<5> - Просмотреть информацию о всех книгах\n"
-           "<6> - Модифицировать информацию о книгах\n"
-           "<7> - Выход\n Введите пункт меню <1-7>:"))
+    print("Выберете пункт меню:")
     while True:
 
         try:
@@ -72,8 +70,9 @@ while True:
         print(data.decode('utf-8'))
 
     if number == 5:
-        data = client_socket.recv(2048)
+        data = client_socket.recv(4096)
         print(data.decode('utf-8'))
+        res = (data.decode('utf-8'))
 
     if number == 6:
 
@@ -120,4 +119,3 @@ while True:
 
         else:
             print(data.decode('utf-8'))
-
