@@ -2,6 +2,7 @@ import pypyodbc
 
 
 def add_book(client):
+
     client.send("Добавте поля для новой книги через Enter:\n Уникильный номер:".encode('utf8'))
 
     data = client.recv(1024)  # получаем данные в байтах

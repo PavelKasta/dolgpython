@@ -31,35 +31,12 @@ try:
             data = client_socket.recv(1024)
             print(data.decode('utf-8'))
 
-            count = input('>')
-            client_socket.send(count.encode('utf8'))
+            for row in range(0, 5):
+                count = input('>')
+                client_socket.send(count.encode('utf8'))
 
-            data = client_socket.recv(1024)
-            print(data.decode('utf-8'))
-
-            count = input('>')
-            client_socket.send(count.encode('utf8'))
-
-            data = client_socket.recv(1024)
-            print(data.decode('utf-8'))
-
-            count = input('>')
-            client_socket.send(count.encode('utf8'))
-
-            data = client_socket.recv(1024)
-            print(data.decode('utf-8'))
-
-            count = input('>')
-            client_socket.send(count.encode('utf8'))
-
-            data = client_socket.recv(1024)
-            print(data.decode('utf-8'))
-
-            count = input('>')
-            client_socket.send(count.encode('utf8'))
-
-            data = client_socket.recv(1024)
-            print(data.decode('utf-8'))
+                data = client_socket.recv(1024)
+                print(data.decode('utf-8'))
 
         if number == 2 or number == 3 or number == 4:
             data = client_socket.recv(1024)
@@ -74,7 +51,6 @@ try:
         if number == 5:
             data = client_socket.recv(4096)
             print(data.decode('utf-8'))
-            res = (data.decode('utf-8'))
 
         if number == 6:
 
@@ -89,35 +65,12 @@ try:
             if str(data.decode('utf-8')) == "Новый уникильный номер:":
                 print(data.decode('utf-8'))
 
-                number = input('>')
-                client_socket.send(number.encode('utf8'))
+                for row in range(0, 5):
+                    number = input('>')
+                    client_socket.send(number.encode('utf8'))
 
-                data = client_socket.recv(1024)
-                print(data.decode('utf-8'))
-
-                number = input('>')
-                client_socket.send(number.encode('utf8'))
-
-                data = client_socket.recv(1024)
-                print(data.decode('utf-8'))
-
-                number = input('>')
-                client_socket.send(number.encode('utf8'))
-
-                data = client_socket.recv(1024)
-                print(data.decode('utf-8'))
-
-                number = input('>')
-                client_socket.send(number.encode('utf8'))
-
-                data = client_socket.recv(1024)
-                print(data.decode('utf-8'))
-
-                number = input('>')
-                client_socket.send(number.encode('utf8'))
-
-                data = client_socket.recv(1024)
-                print(data.decode('utf-8'))
+                    data = client_socket.recv(1024)
+                    print(data.decode('utf-8'))
 
             else:
                 print(data.decode('utf-8'))
