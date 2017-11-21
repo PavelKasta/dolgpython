@@ -39,7 +39,7 @@ def connecting(client):
 while True:
     client, address = server_socket.accept()
 
-    main = threading.Thread(target=connecting, args=client)
+    main = threading.Thread(target=connecting, args=[client])
     main.start()
 
 server_socket.close()
