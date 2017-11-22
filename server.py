@@ -1,6 +1,7 @@
 import socket
 import SQLserver
 import threading
+import os
 import sys
 
 server_socket = socket.socket()
@@ -8,8 +9,6 @@ server_socket.bind(('', 34344))
 server_socket.listen(10)
 
 print('Server to start...')
-
-clients = []
 
 
 def connecting(client):
@@ -44,19 +43,20 @@ def connecting(client):
         print("Server to stop...")
 
 
-def stop_server(server_socket):
-    Stop = int(input("Для отсановки серверы нажмите '1':\n"))
-    if Stop == 1:
-        client.close()
-        server_socket.close()
+def stop_server():
+    Stop = str(input("Для отсановки серверы нажмите введите 'stop':\n"))
+    if Stop == "stop":
+        print("прекращение работы сервера")
+        os._exit(0)
+    else:
+        stop_server()
 
 
 while True:
     client, address = server_socket.accept()
 
     main = threading.Thread(target=connecting, args=[client])
-    stop = threading.Thread(target=stop_server, args=[server_socket])
+    stop = threading.Thread(target=stop_server)
     stop.start()
     main.start()
 
-server_socket.close()

@@ -33,7 +33,7 @@ def add_book(client):
     cursor = connection.cursor()
 
     cursor.execute("INSERT INTO Books\n"
-                   "VALUES('" + num + "', '" + aut + "', '" + nam + "','" + yea + "','" + amo + "')")
+                   "VALUES('"+num+"','"+aut+"','"+nam+"','"+yea+"','"+amo+"')")
 
     send_message("Книга успешно добавлена", client)
     connection.commit()
@@ -142,40 +142,35 @@ def edit_book(client):
         number = (
             "UPDATE Books\n"
             "SET Уникальный_номер= '" + num + "'\n"
-                                              "WHERE Название= '" + name + "'"
-        )
+                                              "WHERE Название= '" + name + "'")
         cursor.execute(number)
         connection.commit()
 
         author = (
             "UPDATE Books\n"
             "SET Автор= '" + aut + "'\n"
-                                   "WHERE Название= '" + name + "'"
-        )
+                                   "WHERE Название= '" + name + "'")
         cursor.execute(author)
         connection.commit()
 
         year = (
             "UPDATE Books\n"
             "SET Год_выпуска= '" + yea + "'\n"
-                                         "WHERE Название= '" + name + "'"
-        )
+                                         "WHERE Название= '" + name + "'")
         cursor.execute(year)
         connection.commit()
 
         amount = (
             "UPDATE Books\n"
             "SET Колличество_экземпляров= '" + amo + "'\n"
-                                                     "WHERE Название= '" + name + "'"
-        )
+                                                     "WHERE Название= '" + name + "'")
         cursor.execute(amount)
         connection.commit()
 
         name_b = (
             "UPDATE Books\n"
             "SET Название= '" + nam + "'\n"
-                                      "WHERE Название= '" + name + "'"
-        )
+                                      "WHERE Название= '" + name + "'")
 
         cursor.execute(name_b)
         connection.commit()

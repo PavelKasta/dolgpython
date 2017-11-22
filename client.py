@@ -2,8 +2,8 @@
 
 import socket
 
-Сlient_Socket = socket.socket()
-Сlient_Socket.connect(('localhost', 34344))
+client_socket = socket.socket()
+client_socket.connect(('localhost', 34344))
 print(("\n\n"
        "<1> - Добавить новую книгу\n"
        "<2> - Удалить книгу\n"
@@ -13,14 +13,11 @@ print(("\n\n"
        "<6> - Модифицировать информацию о книгах\n"))
 try:
     while True:
-
         print("Выберете пункт меню:")
         while True:
-
             try:
                 number = int(input('>'))
-
-                if number >= 1 and number <= 8:
+                if 1 <= number <= 8:
                     break
             except ValueError as e:
                 print("Введите ЧИСЛО от 1 до 7.")
